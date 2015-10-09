@@ -34,6 +34,8 @@ end
 
 gem 'bootstrap-sass'
 
+gem 'opal'
+
 
 
 # Use ActiveModel has_secure_password

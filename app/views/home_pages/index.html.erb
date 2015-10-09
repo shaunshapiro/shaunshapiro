@@ -373,14 +373,128 @@
             </div>
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2">
+                    <div class="col-lg-12">
                         <div class="modal-body">
                             <h2>Reverse Polish Notation Calculator</h2>
                             <hr class="star-primary">
-                            <script src="//repl.it/embed/BPGW/1.js"></script>
-                            <p>This is a basic RPN Notation Calculator. It takes numeric input before taking an operator. 
-                                Enter a number, a second number, and a valid operation (+ - * / ) to get a result. After that, you can continue to enter one new number followed by one new operation to continue performing operations. 
-                                Press 'q' to exit the program. </p>
+                            <!--Leave formatting below as-is (without indenting) due to how prettify currently reads it -->
+                            <pre class="prettyprint lang-rb">
+                            require 'minitest/autorun'
+
+                            module RPNCalculator
+
+                              def self.calculate(total = 0, first_pass = true)
+
+                                #Only used for first operation; afterwards only 1 number needed between operations.
+                                if first_pass == true
+                                  total = get_number
+                                  return if total == :exit 
+                                end
+                                
+                                num = get_number
+                                return if num == :exit
+                                
+                                operator = get_operator(num)
+                                return if operator == :exit
+
+                                puts total = RPNCalculator.operate(operator, total, num)  
+                                RPNCalculator.calculate(total, false)
+                              end
+
+                              def self.get_number
+                                num = gets
+                                return :exit if num.nil?
+                                num = num.chomp unless num.nil?
+                                while ! numeric?(num)
+                                  return :exit if num == 'q' || num == nil
+                                  puts "Please enter a valid number"  
+                                  num = gets
+                                  num = num.chomp unless num.nil?
+                                end
+                                num = num.to_f
+                              end
+
+                              def self.get_operator(num)
+                                operator = gets
+                                return :exit if operator.nil?
+                                operator = operator.chomp unless operator.nil?
+                                while ! valid_operation?(operator, num)
+                                 return :exit if operator == 'q' || operator == nil
+                                 operator = gets
+                                 operator = operator.chomp unless operator.nil?
+                                end
+                                return operator
+                              end
+
+                              #Checks for valid (numeric) input as either decimal or whole number.
+                              def self.numeric?(num)
+                                ! (num.to_s != num.to_i.to_s && num.to_s != num.to_f.to_s)
+                              end
+
+                              #Checks for valid operator input.
+                              def self.valid_operation?(operator, num)
+                                unless ["+", "-", "*"].include?(operator) 
+                                  if num == 0 && operator == '/'
+                                    puts "Please dont't divide by zero!"
+                                    puts "Please enter a valid operator + - * / "
+                                  elsif operator == '/'
+                                    return true
+                                  else
+                                    puts "Please enter a valid operator + - * / "     
+                                  end
+                                else
+                                  return true
+                                end
+                              end
+
+                              #Perform mathematical operations.
+                              def self.operate(operator, num1, num2)
+                                return num1.send(operator, num2)
+                              end
+                            end
+
+                            puts RPNCalculator.calculate
+
+                            class TestRPNCalculator < MiniTest::Test
+
+                              def test_operator
+                                total = RPNCalculator.operate("+", 2, 3)
+                                assert_equal total, 5.0
+                              end
+
+                              def test_numeric_true
+                                is_numeric = RPNCalculator.numeric?(34)   
+                                assert is_numeric   
+                              end
+
+                              def test_numeric_false
+                                is_not_numeric = RPNCalculator.numeric?('w')
+                                assert ! is_not_numeric 
+                              end
+
+                              def test_valid_operation_true
+                                valid_operation = RPNCalculator.valid_operation?('*', 2)
+                                assert valid_operation
+                              end
+
+                              def test_valid_operation_false
+                                valid_operation = RPNCalculator.valid_operation?('potato', 2)
+                                assert ! valid_operation
+                              end
+
+                              def test_valid_operation_divide_by_zero
+                                valid_operation = RPNCalculator.valid_operation?('/', 0)
+                                assert ! valid_operation
+                              end
+                            end
+                            </pre>
+                            <p>
+                              This is a basic RPN Notation Calculator. It takes numeric input before taking an operator. 
+                              <br/>
+                              Enter a number, a second number, and a valid operation (+ - * / ) to get a result. After that, you can continue to enter one new number followed by one new operation to continue performing operations. Press 'q' to exit the program.
+                              <br/>
+                              <a href="https://repl.it/BPGW/1" target="_blank">Click here to run the code.</a> 
+                            </p>
                             
                             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
                         </div>

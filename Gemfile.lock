@@ -57,6 +57,11 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.11.2)
+    opal (0.7.2)
+      hike (~> 1.2)
+      sourcemap (~> 0.1.0)
+      sprockets (>= 2.2.3, < 3.0.0)
+      tilt (~> 1.4)
     pg (0.18.3)
     polyglot (0.3.5)
     rack (1.5.5)
@@ -87,6 +92,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sourcemap (0.1.1)
     sprockets (2.12.4)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -117,6 +123,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   jbuilder (~> 1.2)
   jquery-rails
+  opal
   pg
   rails (= 4.0.1)
   sass-rails (~> 4.0.0)
